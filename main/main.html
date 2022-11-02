@@ -5,22 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>混凝土计算器</title>
-    <script src=""></script>
+    <style>
+    
+    </style>
 </head>
 <body>
     <h1 style="text-align: center;">《混凝土设计》计算器</h1>
     <h6 style="text-align: right;">v0.01 dev</h6>
     <hr>
+
     <div id="setting">
-        <h3>参数设置:</h3>
-        <span>强度: </span><input type="text" value="">
+        <h3>基本设计参数:</h3>       
+        <span>强度: </span>
+        <select name="" id="">
+            <option value="30">C30</option>
+            <option value="C40">C40</option>
+        </select>
+        <span id="gangjin">钢筋种类: </span>
+        <select name="" id="">
+            <option value="400">HRB400</option>
+            <option value=""></option>
+        </select>
+        <span>h x b</span>
+        
         <input type="button" value="确认">
     </div>
     <hr>
+
+
+    <div>
+        <h3>参数复查:</h3>
+        <input type="button" value="开始计算">
+        <input type="button" value="重置参数">
+    </div>
+
+
+    <hr>
     <div id="result">
         <h3>计算结果:</h3>
-
-        
     </div>
 </body>
 </html>
