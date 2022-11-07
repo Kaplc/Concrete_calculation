@@ -5,44 +5,141 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>混凝土计算器</title>
-    <style>
-    
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    <h1 style="text-align: center;">《混凝土设计》计算器</h1>
-    <h6 style="text-align: right;">v0.01 dev</h6>
-    <hr>
+    <div id="app">
+        <div id="title">
+            <h1 style="text-align: center;">《混凝土设计》计算器</h1>
+            <h6 style="text-align: right;">v0.01 dev</h6>
+            <hr>
+        </div>
 
-    <div id="setting">
-        <h3>基本设计参数:</h3>       
-        <span>强度: </span>
-        <select name="" id="">
-            <option value="30">C30</option>
-            <option value="C40">C40</option>
-        </select>
-        <span id="gangjin">钢筋种类: </span>
-        <select name="" id="">
-            <option value="400">HRB400</option>
-            <option value=""></option>
-        </select>
-        <span>h x b</span>
-        
-        <input type="button" value="确认">
+        <div id="setting">
+            <div>
+                <h3>输入参数:</h3>       
+            <span>混凝土强度: </span>
+            <select name="" id="" v-model="strength" @blur="show_strength">
+                <option value="C30" >C30</option>
+                <option value="C40">C40</option>
+            </select>
+            <span id="">&#160&#160&#160 钢筋种类: </span>
+            <select name="" id="" v-model="aSteelBar" @blur="show_aSteelBar">
+                <option value="HRB300">HRB300</option>
+                <option value="HRB400">HRB400</option>
+                
+            </select>
+            <span>&#160&#160&#160 h x b:</span>
+            <input type="text" name="height" id="h" style="width: 30px;">mm&#160 x
+            <input type="text" name="width" id="b" style="width: 30px;">mm
+            <input type="button" value="确认">
+            </div>
+            
+        </div>
+
+
+        <div >
+            <h3>生成参数:</h3>
+            <div >
+                <span>混凝土强度:&#160{{strength}} ---> </span>   
+                <span>fc = {{fc}} ;  </span>
+                <span>ft = {{ft}}</span>
+
+                <br>
+
+                <span>钢筋种类: &#160{{aSteelBar}} ---> </span>
+                <span>fy =  {{fy}} ;  </span>
+                <span>fy' = {{fy_}} ;  </span>
+
+            </div>
+
+            <div>
+                <input type="button" value="开始计算">
+                <a href="main.html"><input type="button" value="重置参数"></a>
+            </div>
+            
+        </div>
+
+
+        <hr>
+        <div id="result">
+            <h3>计算结果:</h3>
+        </div>
     </div>
-    <hr>
-
-
-    <div>
-        <h3>参数复查:</h3>
-        <input type="button" value="开始计算">
-        <input type="button" value="重置参数">
-    </div>
-
-
-    <hr>
-    <div id="result">
-        <h3>计算结果:</h3>
-    </div>
+    
 </body>
+<script>
+    // 钢筋强度表
+    
+    var aSteelBar_tb = {
+        "hrb400": 2
+    }
+    var hrb400_tb = {
+        "fy": 360,
+        "fy_": 360
+    }
+
+    function select_aSteelBar_tb(name){
+        // 查询是哪个表并赋值
+        if (name == "HRB400"){
+            fy = hrb400_tb["fy"]
+            fy_ = hrb400_tb["fy_"]
+            return {"res_fy": fy, "res_fy_": fy_}
+        }else{
+            return {"res_fy": 'null', "res_fy_": 'null'}
+        }
+        // 返回字典
+        
+    }
+
+    // 混凝土强度表
+    var c30_tb = {
+        "fc": 14.3,
+        "ft": 1.43
+    }
+    var strength_tb = {
+        "c30": 3
+    }
+
+    function select_strength_tb(name){
+        if (name == "C30"){
+            fy = c30_tb["fc"]
+            fy_ = c30_tb["ft"]
+            return {"res_fc": fy, "res_ft": fy_}
+        }
+        else{
+            return {"res_fc": 'null', "res_ft": 'null'}
+        }
+        
+    }
+
+    // vue框架
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            strength: 'null',
+            aSteelBar: "null",
+            fy: 'null',
+            fy_: 'null',
+            fc: 'null',
+            ft: 'null'
+        },
+
+        methods: {
+            // 查询fc, ft并显示
+            show_strength(){
+                
+                this.fc = select_strength_tb(this.strength)["res_fc"]
+                this.ft = select_strength_tb(this.strength)["res_ft"]
+                
+                
+            },
+            // 查询fy并显示
+            show_aSteelBar(){
+                this.fy = select_aSteelBar_tb(this.aSteelBar)["res_fy"]
+                this.fy_ = select_aSteelBar_tb(this.aSteelBar)["res_fy_"]
+            }
+        },
+    })
+</script>
 </html>
