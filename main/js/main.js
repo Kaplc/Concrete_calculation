@@ -1,11 +1,25 @@
     // 钢筋强度表
     
     var aSteelBar_tb = {
-        "hrb400": 2
-    }
-    var hrb400_tb = {
-        "fy": 360,
-        "fy_": 360
+        "HPB300fy": 360,
+        "HPB300fy_": 360,
+        "HRB335fy": 300,
+        "HRB335fy_": 300,
+
+        // HRB400, HRBF400, 
+        "HRB400fy": 360,
+        "HRB400fy_": 360,
+        "HRBF400fy": 360,
+        "HRBF400fy_": 360,
+        "RRB400fy": 360,
+        "RRB400fy_": 360,
+
+        // HRB500, HRBF500
+        "HRB500fy": 435,
+        "HRB500fy_": 435,
+        "HRBF500fy": 435,
+        "HRBF500fy_": 435,
+
     }
 
     function select_aSteelBar_tb(name){
