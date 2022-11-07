@@ -1,12 +1,16 @@
+    // -------------------数据表-----------------
     // 钢筋强度表
     
     var aSteelBar_tb = {
-        "HPB300fy": 360,
-        "HPB300fy_": 360,
+        // HPB300
+        "HPB300fy": 270,
+        "HPB300fy_": 270,
+
+        // HRB335
         "HRB335fy": 300,
         "HRB335fy_": 300,
 
-        // HRB400, HRBF400, 
+        // HRB400, HRBF400, RRB400
         "HRB400fy": 360,
         "HRB400fy_": 360,
         "HRBF400fy": 360,
@@ -21,20 +25,7 @@
         "HRBF500fy_": 435,
 
     }
-
-    function select_aSteelBar_tb(name){
-        // 查询是哪个表并赋值
-        if (name == "HRB400"){
-            fy = hrb400_tb["fy"]
-            fy_ = hrb400_tb["fy_"]
-            return {"res_fy": fy, "res_fy_": fy_}
-        }else{
-            return {"res_fy": 'null', "res_fy_": 'null'}
-        }
-        // 返回字典
-        
-    }
-
+  
     // 混凝土强度表
     var strength_tb = {
         // c15
@@ -82,7 +73,34 @@
 
     }
     
+    // 混凝土保护层最小厚度c表
+    var c_tb = {
+        // bqk: 构件类型选择板、墙、壳的值
+        // lzg: 梁、柱、杆
 
+        // 一级
+        "1_bqk": 15,
+        "1_lzg": 20,
+
+        // 二a
+        "2a_bqk": 20,
+        "2a_lzg": 25,
+
+        // 二b
+        "2b_bqk": 25,
+        "2b_lzg": 35,
+        
+        // 三a
+        "3a_bqk": 30,
+        "3a_lzg": 30,
+        
+        
+        "3b_bqk": 40,
+        "3b_lzg": 50,
+    }
+    
+    // -------------------查询函数----------------
+    // 混凝土查询函数
     function select_strength_tb(name){
         
         fy = strength_tb[name + "fc"]
@@ -92,19 +110,73 @@
         
     }
 
+    // 钢筋强度查询函数
+    function select_aSteelBar_tb(name){
+        // 查询是哪个表并赋值
+       
+        fy = aSteelBar_tb[name + "fy"]
+        fy_ = aSteelBar_tb[name + "fy_"]
+
+        // 返回字典
+        return {"res_fy": fy, "res_fy_": fy_}
+        
+        
+        
+    }
+
+    // 查询混凝土保护层最小厚度c
+    function select_c_tb(environmental, type){
+        // alert(environmental + '_' + type)
+        c = c_tb[environmental + '_' + type] 
+        // alert(c)
+        return c
+    }
+
+
+
+
+    // ----------------计算函数---------------
+
+    // 计算as
+    function calculation_as(environmental, type){
+        c = select_c_tb(environmental, type)
+
+        // 由于as是js的语法关键字混凝土的as改成as_变量名
+        as_ = c + 10 + 10 
+
+        return as_
+    }
+
+    // 计算h0
+    function calculation_h0(h, as_){
+        h0 = h - as_
+        return h0
+    }
+
+
     // vue框架
     var vm = new Vue({
         el: '#app',
         data: {
+            environmental_class: '',
+            component_type: '',
             strength: 'null',
             aSteelBar: "null",
+            h: '',
+            b: '',
             fy: 'null',
             fy_: 'null',
             fc: 'null',
-            ft: 'null'
+            ft: 'null',
+            as: 'null',
+            h0: 'null',
+            a1: 'null',
+            kexi_b: 'null',
+
         },
 
         methods: {
+            
             // 查询fc, ft并显示
             show_strength(){
                 
@@ -117,6 +189,31 @@
             show_aSteelBar(){
                 this.fy = select_aSteelBar_tb(this.aSteelBar)["res_fy"]
                 this.fy_ = select_aSteelBar_tb(this.aSteelBar)["res_fy_"]
+            },
+
+            // 显示计算as
+            show_as(){
+                
+                if (!(this.environmental_class == '' || this.component_type == '')){
+                    
+                    this.as = calculation_as(this.environmental_class, this.component_type)
+                    
+                }else{
+                    this.as = 'null'
+                    
+                }
+                
+            },
+
+            // 生成剩余参数
+            calculation_parameter(){
+                // 生成α1, ξb
+                this.a1 = 1.0 
+                this.kexi_b = 0.518
+
+                // 显示计算h0
+                this.h0 = calculation_h0(this.h, this.as)
             }
+
         },
     })

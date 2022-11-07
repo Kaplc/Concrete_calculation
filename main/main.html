@@ -8,27 +8,33 @@
     <script src="./js/vue.js"></script>
 </head>
 <body>
-    <div id="app">
+    <div id="app" >
         <div id="title">
             <h1 style="text-align: center;">《混凝土设计》计算器</h1>
             <h6 style="text-align: right;">v0.2 dev</h6>
+            <a href="./doc/instructions.html">使用说明</a>
             <hr>
         </div>
 
         <div id="setting">
             <h3>输入参数:</h3>  
             <div>
-                <span>环境等级:&#160&#160&#160</span>
-                <select name="" id="">
+                <span>环境类别:&#160&#160&#160</span>
+                <select name="" id="" v-model="environmental_class" @change="show_as">
                     <option value="1">一级</option>
+                    <option value="2a">二a级</option>
+                    <option value="2b">二b级</option>
+                    <option value="3a">三a级</option>
+                    <option value="3b">三b级</option>
                 </select>
-                <span>&#160&#160&#160 使用位置:</span>
-                <select name="" id="">
-                    <option value="">梁</option>
+                <span>&#160&#160&#160 构件类型:</span>
+                <select name="" id="" v-model="component_type" @change="show_as">
+                    <option value="bqk">板、墙、壳</option>
+                    <option value="lzg">梁、柱、杆 </option>
                 </select>
                 <span>&#160&#160&#160 h x b:</span>
-            <input type="text" name="height" id="h" style="width: 30px;">mm&#160 x
-            <input type="text" name="width" id="b" style="width: 30px;">mm
+            <input type="text" name="height" id="" style="width: 30px;" v-model="h">mm&#160 x
+            <input type="text" name="width" id="" style="width: 30px;" v-model="b">mm
             </div>
 
             
@@ -54,31 +60,58 @@
 
             <span id="">&#160&#160&#160 钢筋种类: </span>
             <select name="" id="" v-model="aSteelBar" @change="show_aSteelBar">
-                <option value="HRB300">HRB300</option>
+                <option value="HPB300">HPB300</option>
+                <option value="HRB335">HRB335</option>
                 <option value="HRB400">HRB400</option>
+                <option value="HRBF400">HBRF400</option>
+                <option value="RRB400">RRB400</option>
+                <option value="HRB500">HRB500</option>
+                <option value="HRBF500">HRBF500</option>
+                <option value="HRBF500">HRBF500</option>
             </select>
             </div>
         
         </div>
-
+        
 
         <div >
             <h3>生成参数:</h3>
             <div >
                 <!-- vue框架变量格式: {{变量名}} -->
-                <span>混凝土强度:&#160{{strength}} ---> </span>   
+                <span>h x b = {{h}} * {{b}}</span>
+
+                 <br>
+
                 <span>fc = {{fc}} ;  </span>
                 <span>ft = {{ft}}</span>
 
                 <br>
 
-                <span>钢筋种类: &#160{{aSteelBar}} ---> </span>
+                
                 <span>fy =  {{fy}} ;  </span>
                 <span>fy' = {{fy_}} ;  </span>
 
+                <br>
+                <span>αs = {{as}}</span>
+
+                <br>
+                <span>h0 = h - αs = {{h0}}</span>
+
+                <br>
+                <span>α1 = {{a1}}</span>
+
+                <br>
+                <span>ξb = {{kexi_b}}</span>
+
             </div>
 
+            <br>
             <div>
+                
+                <input type="button" value="生成剩余参数" @click="calculation_parameter">
+                <span style="color: red;">注意: 必须点击生成剩余参数才能开始计算</span>
+                
+                <p></p>
                 <input type="button" value="开始计算">
                 <a href="main.html"><input type="button" value="重置参数"></a>
             </div>
